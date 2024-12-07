@@ -32,7 +32,7 @@ export const ThemeProvider = ({ children }) => {
 
     useEffect(() => {
         document.body.style.backgroundColor = theme.palette.background.default;
-    }, [darkMode]);
+    }, [darkMode, theme.palette.background.default]);
 
     return (
         <ThemeContext.Provider value={{ darkMode, toggleTheme }}>

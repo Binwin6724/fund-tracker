@@ -322,13 +322,36 @@ const Dashboard = () => {
 
         {/* Controls */}
         <Grid item xs={12}>
-          <Paper sx={{ p: 2, display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
-            <FormControl sx={{ minWidth: 120 }}>
+          <Paper 
+            sx={{ 
+              p: 2, 
+              display: 'flex', 
+              gap: 2, 
+              alignItems: 'center', 
+              flexWrap: { xs: 'wrap', md: 'nowrap' },
+              '& .MuiFormControl-root': {
+                minWidth: { xs: '100%', sm: '160px' }
+              },
+              '& .search-field': {
+                flex: 1,
+                minWidth: { xs: '100%', sm: 'auto' }
+              },
+              '& .action-buttons': {
+                display: 'flex',
+                gap: 2,
+                marginLeft: { xs: 0, sm: 'auto' },
+                width: { xs: '100%', sm: 'auto' },
+                justifyContent: { xs: 'space-between', sm: 'flex-end' }
+              }
+            }}
+          >
+            <FormControl>
               <InputLabel>Month</InputLabel>
               <Select
                 value={selectedMonth}
                 label="Month"
                 onChange={(e) => setSelectedMonth(e.target.value)}
+                sx={{ minWidth: '160px' }}
               >
                 {Array.from({ length: 12 }, (_, i) => (
                   <MenuItem key={i + 1} value={i + 1}>
@@ -337,12 +360,13 @@ const Dashboard = () => {
                 ))}
               </Select>
             </FormControl>
-            <FormControl sx={{ minWidth: 120 }}>
+            <FormControl>
               <InputLabel>Year</InputLabel>
               <Select
                 value={selectedYear}
                 label="Year"
                 onChange={(e) => setSelectedYear(e.target.value)}
+                sx={{ minWidth: '160px' }}
               >
                 {Array.from({ length: 5 }, (_, i) => {
                   const year = new Date().getFullYear() - i;
@@ -355,10 +379,11 @@ const Dashboard = () => {
               </Select>
             </FormControl>
             <TextField
+              className="search-field"
               placeholder="Search transactions..."
               value={searchQuery}
+              style={{top: '8px'}}
               onChange={(e) => setSearchQuery(e.target.value)}
-              sx={{ flexGrow: 1, minWidth: 200 }}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -367,7 +392,7 @@ const Dashboard = () => {
                 ),
               }}
             />
-            <Tooltip title="Download as CSV">
+            <Box className="action-buttons">
               <Button
                 variant="outlined"
                 startIcon={<FileDownloadIcon />}
@@ -376,15 +401,15 @@ const Dashboard = () => {
               >
                 Export
               </Button>
-            </Tooltip>
-            <Button
-              variant="contained"
-              startIcon={<AddIcon />}
-              onClick={() => setTransactionOpen(true)}
-              sx={{ ml: 'auto' }}
-            >
-              Add Transaction
-            </Button>
+              <Button
+                variant="contained"
+                startIcon={<AddIcon />}
+                onClick={() => setTransactionOpen(true)}
+                sx={{ whiteSpace: 'nowrap' }}
+              >
+                Add Transaction
+              </Button>
+            </Box>
           </Paper>
         </Grid>
 
