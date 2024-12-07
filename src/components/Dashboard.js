@@ -241,10 +241,10 @@ const Dashboard = () => {
           <Grid item xs={12} sm={6} md={3}>
             <Card sx={{ bgcolor: 'warning.light' }}>
               <CardContent>
-                <Typography color="textSecondary" gutterBottom>
+                <Typography color="textSecondary" gutterBottom style={{fontWeight: 'bold'}}>
                   Amount to Repay
                 </Typography>
-                <Typography variant="h5" component="div" color="warning.dark">
+                <Typography variant="h5" component="div" style={{color: 'red'}}>
                   ₹{totals.toRepay.toFixed(2)}
                 </Typography>
               </CardContent>
