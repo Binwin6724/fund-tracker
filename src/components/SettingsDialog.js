@@ -7,8 +7,6 @@ import {
   Button,
   Box,
   FormControl,
-  FormControlLabel,
-  Switch,
   Typography,
   CircularProgress,
   Alert,

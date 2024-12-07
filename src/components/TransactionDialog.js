@@ -13,7 +13,6 @@ import {
   Alert,
   Box
 } from '@mui/material';
-import { useAuth } from '../context/AuthContext';
 
 const categories = {
   expense: ['Food', 'Transportation', 'Utilities', 'Entertainment', 'Shopping', 'Healthcare', 'Loan', 'To Repay', 'Other'],
@@ -21,7 +20,6 @@ const categories = {
 };
 
 const TransactionDialog = ({ open, onClose, onTransactionAdded }) => {
-  const { user } = useAuth();
   const [type, setType] = useState('expense');
   const [category, setCategory] = useState('');
   const [amount, setAmount] = useState('');
@@ -37,19 +35,20 @@ const TransactionDialog = ({ open, onClose, onTransactionAdded }) => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/transactions', {
+      const formData = {
+        type,
+        category,
+        amount,
+        description,
+        date: new Date(date)
+      };
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/transactions`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({
-          type,
-          category,
-          amount,
-          description,
-          date: new Date(date)
-        })
+        body: JSON.stringify(formData)
       });
 
       if (!response.ok) {

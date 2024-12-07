@@ -25,7 +25,6 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Tooltip,
   TextField,
   InputAdornment
 } from '@mui/material';
@@ -57,14 +56,14 @@ const Dashboard = () => {
   });
 
   useEffect(() => {
-    fetchTransactions();
+    fetchTransactions(); // eslint-disable-next-line 
   }, [selectedMonth, selectedYear]);
 
   const fetchTransactions = async () => {
     try {
       const token = localStorage.getItem('token');
       const response = await fetch(
-        `http://localhost:5000/api/transactions?month=${selectedMonth}&year=${selectedYear}`,
+        `${process.env.REACT_APP_API_URL}/api/transactions?month=${selectedMonth}&year=${selectedYear}`,
         {
           headers: {
             'Authorization': `Bearer ${token}`
@@ -129,7 +128,7 @@ const Dashboard = () => {
   const handleDeleteConfirm = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/transactions/${selectedTransaction._id}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/transactions/${selectedTransaction._id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
