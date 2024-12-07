@@ -24,9 +24,10 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogActions
+  DialogActions,
+  Tooltip
 } from '@mui/material';
-import { Add as AddIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import { Add as AddIcon, Delete as DeleteIcon, FileDownload as FileDownloadIcon } from '@mui/icons-material';
 import ThemeSwitch from './ThemeSwitch';
 import ProfileDialog from './ProfileDialog';
 import SettingsDialog from './SettingsDialog';
@@ -144,6 +145,59 @@ const Dashboard = () => {
     }
   };
 
+  const handleDownloadCSV = () => {
+    // Format currency function
+    const formatCurrency = (amount) => {
+      const formatted = new Intl.NumberFormat('en-IN', {
+        style: 'currency',
+        currency: 'INR',
+        minimumFractionDigits: 2
+      }).format(amount).replace('₹', '').trim();
+      return `"₹ ${formatted}"`; // Wrap in quotes to prevent CSV splitting
+    };
+
+    // Create summary section
+    const summaryContent = [
+      'Monthly Summary',
+      `Month,${new Date(2000, selectedMonth - 1).toLocaleString('default', { month: 'long' })} ${selectedYear}`,
+      '',
+      'Summary Cards',
+      `Total Income,${formatCurrency(totals.totalIncome)}`,
+      `Total Expenses,${formatCurrency(totals.totalExpenses)}`,
+      `Balance,${formatCurrency(totals.balance)}`,
+      `Amount to Repay,${formatCurrency(totals.toRepay)}`,
+      '',
+      'Transaction Details',
+    ];
+
+    // Create transactions section
+    const headers = ['Date', 'Type', 'Category', 'Description', 'Amount'];
+    const transactionsContent = [
+      headers.join(','),
+      ...transactions.map(t => [
+        new Date(t.date).toLocaleDateString('en-IN'),
+        t.type,
+        t.category,
+        `"${t.description.replace(/"/g, '""')}"`, // Handle descriptions with commas
+        formatCurrency(t.amount)
+      ].join(','))
+    ];
+
+    // Combine all content with BOM for Excel
+    const BOM = '\uFEFF';
+    const csvContent = BOM + [...summaryContent, ...transactionsContent].join('\n');
+
+    // Create and download the file
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `transactions_${new Date(2000, selectedMonth - 1).toLocaleString('default', { month: 'short' })}_${selectedYear}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <AppBar position="static">
@@ -254,7 +308,7 @@ const Dashboard = () => {
 
         {/* Controls */}
         <Grid item xs={12}>
-          <Paper sx={{ p: 2, display: 'flex', gap: 2 }}>
+          <Paper sx={{ p: 2, display: 'flex', gap: 2, alignItems: 'center' }}>
             <FormControl sx={{ minWidth: 120 }}>
               <InputLabel>Month</InputLabel>
               <Select
@@ -286,6 +340,16 @@ const Dashboard = () => {
                 })}
               </Select>
             </FormControl>
+            <Tooltip title="Download as CSV">
+              <Button
+                variant="outlined"
+                startIcon={<FileDownloadIcon />}
+                onClick={handleDownloadCSV}
+                disabled={transactions.length === 0}
+              >
+                Export
+              </Button>
+            </Tooltip>
             <Button
               variant="contained"
               startIcon={<AddIcon />}
