@@ -25,9 +25,11 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Tooltip
+  Tooltip,
+  TextField,
+  InputAdornment
 } from '@mui/material';
-import { Add as AddIcon, Delete as DeleteIcon, FileDownload as FileDownloadIcon } from '@mui/icons-material';
+import { Add as AddIcon, Delete as DeleteIcon, FileDownload as FileDownloadIcon, Search as SearchIcon } from '@mui/icons-material';
 import ThemeSwitch from './ThemeSwitch';
 import ProfileDialog from './ProfileDialog';
 import SettingsDialog from './SettingsDialog';
@@ -46,6 +48,7 @@ const Dashboard = () => {
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [transactions, setTransactions] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [totals, setTotals] = useState({
     totalIncome: 0,
     totalExpenses: 0,
@@ -198,6 +201,17 @@ const Dashboard = () => {
     document.body.removeChild(link);
   };
 
+  // Filter transactions based on search query
+  const filteredTransactions = transactions.filter(transaction => {
+    const searchLower = searchQuery.toLowerCase();
+    return (
+      transaction.description.toLowerCase().includes(searchLower) ||
+      transaction.category.toLowerCase().includes(searchLower) ||
+      transaction.amount.toString().includes(searchQuery) ||
+      transaction.type.toLowerCase().includes(searchLower)
+    );
+  });
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <AppBar position="static">
@@ -308,7 +322,7 @@ const Dashboard = () => {
 
         {/* Controls */}
         <Grid item xs={12}>
-          <Paper sx={{ p: 2, display: 'flex', gap: 2, alignItems: 'center' }}>
+          <Paper sx={{ p: 2, display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
             <FormControl sx={{ minWidth: 120 }}>
               <InputLabel>Month</InputLabel>
               <Select
@@ -340,6 +354,19 @@ const Dashboard = () => {
                 })}
               </Select>
             </FormControl>
+            <TextField
+              placeholder="Search transactions..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              sx={{ flexGrow: 1, minWidth: 200 }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon color="action" />
+                  </InputAdornment>
+                ),
+              }}
+            />
             <Tooltip title="Download as CSV">
               <Button
                 variant="outlined"
@@ -363,60 +390,57 @@ const Dashboard = () => {
 
         {/* Transactions List */}
         <Grid item xs={12}>
-          <Paper sx={{ p: 2 }}>
-            <Typography variant="h6" gutterBottom>
-              Recent Transactions
-            </Typography>
-            {transactions.length === 0 ? (
-              <Typography color="textSecondary" align="center">
-                No transactions found for selected month
+          {filteredTransactions.length === 0 ? (
+            <Paper sx={{ p: 2, textAlign: 'center' }}>
+              <Typography color="textSecondary">
+                {searchQuery ? 'No transactions found matching your search.' : 'No transactions for this month.'}
               </Typography>
-            ) : (
-              transactions.map((transaction) => (
-                <Paper
-                  key={transaction._id}
-                  sx={{
-                    p: 2,
-                    mb: 1,
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    bgcolor: 'background.default'
-                  }}
-                >
-                  <Box>
-                    <Typography variant="subtitle1">
-                      {transaction.description}
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary">
-                      {transaction.category} • {new Date(transaction.date).toLocaleDateString()}
-                    </Typography>
-                  </Box>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                    <Typography
-                      variant="subtitle1"
-                      color={transaction.type === 'income' ? 'primary' : 'error'}
-                    >
-                      {transaction.type === 'income' ? '+' : '-'}₹{transaction.amount.toFixed(2)}
-                    </Typography>
-                    <IconButton
-                      size="small"
-                      color="error"
-                      onClick={() => handleDeleteClick(transaction)}
-                      sx={{ 
-                        '&:hover': { 
-                          backgroundColor: 'error.light',
-                          color: 'error.contrastText'
-                        }
-                      }}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </Box>
-                </Paper>
-              ))
-            )}
-          </Paper>
+            </Paper>
+          ) : (
+            filteredTransactions.map((transaction) => (
+              <Paper
+                key={transaction._id}
+                sx={{
+                  p: 2,
+                  mb: 1,
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  bgcolor: 'background.default'
+                }}
+              >
+                <Box>
+                  <Typography variant="subtitle1">
+                    {transaction.description}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    {transaction.category} • {new Date(transaction.date).toLocaleDateString()}
+                  </Typography>
+                </Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                  <Typography
+                    variant="subtitle1"
+                    color={transaction.type === 'income' ? 'primary' : 'error'}
+                  >
+                    {transaction.type === 'income' ? '+' : '-'}₹{transaction.amount.toFixed(2)}
+                  </Typography>
+                  <IconButton
+                    size="small"
+                    color="error"
+                    onClick={() => handleDeleteClick(transaction)}
+                    sx={{ 
+                      '&:hover': { 
+                        backgroundColor: 'error.light',
+                        color: 'error.contrastText'
+                      }
+                    }}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </Box>
+              </Paper>
+            ))
+          )}
         </Grid>
       </Container>
 
