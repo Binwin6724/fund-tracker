@@ -48,12 +48,26 @@ const Dashboard = () => {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [transactions, setTransactions] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [sortConfig, setSortConfig] = useState({ key: 'date', direction: 'desc' });
+  const [filterConfig, setFilterConfig] = useState({
+    type: '',
+    category: ''
+  });
   const [totals, setTotals] = useState({
     totalIncome: 0,
     totalExpenses: 0,
     balance: 0,
     toRepay: 0
   });
+
+  // Transaction type and category options
+  const TRANSACTION_TYPES = ['income', 'expense'];
+  const TRANSACTION_CATEGORIES = [
+    'Salary', 'Freelance', 'Investments',
+    'Food', 'Transportation', 'Utilities',
+    'Rent', 'Entertainment', 'Shopping',
+    'Health', 'Education', 'To Repay'
+  ];
 
   useEffect(() => {
     fetchTransactions(); // eslint-disable-next-line 
@@ -206,16 +220,58 @@ const Dashboard = () => {
     document.body.removeChild(link);
   };
 
-  // Filter transactions based on search query
-  const filteredTransactions = transactions.filter(transaction => {
-    const searchLower = searchQuery.toLowerCase();
-    return (
-      transaction.description.toLowerCase().includes(searchLower) ||
-      transaction.category.toLowerCase().includes(searchLower) ||
-      transaction.amount.toString().includes(searchQuery) ||
-      transaction.type.toLowerCase().includes(searchLower)
-    );
-  });
+  // Sorting and Filtering Function
+  const processTransactions = () => {
+    let result = [...transactions];
+
+    // Filter by type
+    if (filterConfig.type) {
+      result = result.filter(t => t.type === filterConfig.type);
+    }
+
+    // Filter by category
+    if (filterConfig.category) {
+      result = result.filter(t => t.category === filterConfig.category);
+    }
+
+    // Search query filter
+    if (searchQuery) {
+      const lowercaseQuery = searchQuery.toLowerCase();
+      result = result.filter(t =>
+        t.description.toLowerCase().includes(lowercaseQuery) ||
+        t.category.toLowerCase().includes(lowercaseQuery)
+      );
+    }
+
+    // Sorting
+    result.sort((a, b) => {
+      const modifier = sortConfig.direction === 'asc' ? 1 : -1;
+
+      switch (sortConfig.key) {
+        case 'amount':
+          return modifier * (a.amount - b.amount);
+        case 'description':
+          return modifier * a.description.localeCompare(b.description);
+        case 'date':
+        default:
+          return modifier * (new Date(a.date) - new Date(b.date));
+      }
+    });
+
+    return result;
+  };
+
+  const handleSort = (key) => {
+    setSortConfig(prev => ({
+      key,
+      direction: prev.key === key && prev.direction === 'desc' ? 'asc' : 'desc'
+    }));
+  };
+
+  const handleFilterReset = () => {
+    setFilterConfig({ type: '', category: '' });
+    setSearchQuery('');
+  };
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
@@ -234,10 +290,10 @@ const Dashboard = () => {
             color="inherit"
             sx={{ ml: 1 }}
           >
-            <Avatar 
-              alt={user?.name || 'User'} 
+            <Avatar
+              alt={user?.name || 'User'}
               src={getProfileImageUrl(user?.profileImage)}
-              sx={{ 
+              sx={{
                 bgcolor: theme.palette.primary.main,
                 width: 32,
                 height: 32
@@ -301,9 +357,9 @@ const Dashboard = () => {
                 <Typography color="textSecondary" gutterBottom>
                   Balance
                 </Typography>
-                <Typography 
-                  variant="h5" 
-                  component="div" 
+                <Typography
+                  variant="h5"
+                  component="div"
                   color={totals.balance >= 0 ? 'success.main' : 'error.main'}
                 >
                   ₹{totals.balance.toFixed(2)}
@@ -314,10 +370,10 @@ const Dashboard = () => {
           <Grid item xs={12} sm={6} md={3}>
             <Card sx={{ bgcolor: 'warning.light' }}>
               <CardContent>
-                <Typography color="textSecondary" gutterBottom style={{fontWeight: 'bold'}}>
+                <Typography color="textSecondary" gutterBottom style={{ fontWeight: 'bold' }}>
                   Amount to Repay
                 </Typography>
-                <Typography variant="h5" component="div" style={{color: 'red'}}>
+                <Typography variant="h5" component="div" style={{ color: 'red' }}>
                   ₹{totals.toRepay.toFixed(2)}
                 </Typography>
               </CardContent>
@@ -327,107 +383,150 @@ const Dashboard = () => {
 
         {/* Controls */}
         <Grid item xs={12}>
-          <Paper 
-            sx={{ 
-              p: 2, 
-              display: 'flex', 
-              gap: 2, 
-              alignItems: 'center', 
-              flexWrap: { xs: 'wrap', md: 'nowrap' },
-              '& .MuiFormControl-root': {
-                minWidth: { xs: '100%', sm: '160px' }
-              },
-              '& .search-field': {
-                flex: 1,
-                minWidth: { xs: '100%', sm: 'auto' }
-              },
-              '& .action-buttons': {
-                display: 'flex',
-                gap: 2,
-                marginLeft: { xs: 0, sm: 'auto' },
-                width: { xs: '100%', sm: 'auto' },
-                justifyContent: { xs: 'space-between', sm: 'flex-end' }
-              }
-            }}
-          >
-            <FormControl>
-              <InputLabel>Month</InputLabel>
-              <Select
-                value={selectedMonth}
-                label="Month"
-                onChange={(e) => setSelectedMonth(e.target.value)}
-                sx={{ minWidth: '160px' }}
-              >
-                {Array.from({ length: 12 }, (_, i) => (
-                  <MenuItem key={i + 1} value={i + 1}>
-                    {new Date(2000, i).toLocaleString('default', { month: 'long' })}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <FormControl>
-              <InputLabel>Year</InputLabel>
-              <Select
-                value={selectedYear}
-                label="Year"
-                onChange={(e) => setSelectedYear(e.target.value)}
-                sx={{ minWidth: '160px' }}
-              >
-                {Array.from({ length: 5 }, (_, i) => {
-                  const year = new Date().getFullYear() - i;
-                  return (
-                    <MenuItem key={year} value={year}>
-                      {year}
+          <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
+              <FormControl>
+                <InputLabel>Month</InputLabel>
+                <Select
+                  value={selectedMonth}
+                  label="Month"
+                  onChange={(e) => setSelectedMonth(e.target.value)}
+                  sx={{ minWidth: '160px' }}
+                >
+                  {[...Array(12)].map((_, index) => (
+                    <MenuItem key={index + 1} value={index + 1}>
+                      {new Date(2000, index).toLocaleString('default', { month: 'long' })}
                     </MenuItem>
-                  );
-                })}
-              </Select>
-            </FormControl>
-            <TextField
-              className="search-field"
-              placeholder="Search transactions..."
-              value={searchQuery}
-              style={{top: '8px'}}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon color="action" />
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <Box className="action-buttons">
-              <Button
+                  ))}
+                </Select>
+              </FormControl>
+              <FormControl>
+                <InputLabel>Year</InputLabel>
+                <Select
+                  value={selectedYear}
+                  label="Year"
+                  onChange={(e) => setSelectedYear(e.target.value)}
+                  sx={{ minWidth: '160px' }}
+                >
+                  {Array.from({ length: 5 }, (_, i) => {
+                    const year = new Date().getFullYear() - i;
+                    return (
+                      <MenuItem key={year} value={year}>
+                        {year}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
+              <TextField
+                className="search-field"
+                placeholder="Search transactions..."
                 variant="outlined"
-                startIcon={<FileDownloadIcon />}
-                onClick={handleDownloadCSV}
-                disabled={transactions.length === 0}
-              >
-                Export
-              </Button>
+                fullWidth
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                style={{ top: '8px' }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon />
+                    </InputAdornment>
+                  ),
+                }}
+                sx={{ flex: 1, minWidth: '200px' }}
+              />
+              <Box sx={{ display: 'flex', gap: 1 }}>
+                <Button
+                  variant="contained"
+                  onClick={() => setTransactionOpen(true)}
+                  startIcon={<AddIcon />}
+                >
+                  Add Transaction
+                </Button>
+              </Box>
+            </Box>
+
+            {/* Filter Headers */}
+            <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
+            <Typography variant="subtitle2">Filter By:</Typography>
+              <FormControl>
+                <InputLabel>Type</InputLabel>
+                <Select
+                  value={filterConfig.type}
+                  label="Type"
+                  onChange={(e) => setFilterConfig(prev => ({ ...prev, type: e.target.value }))}
+                  sx={{ minWidth: '140px' }}
+                >
+                  <MenuItem value="">All</MenuItem>
+                  {TRANSACTION_TYPES.map(type => (
+                    <MenuItem key={type} value={type}>
+                      {type.charAt(0).toUpperCase() + type.slice(1)}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <FormControl>
+                <InputLabel>Category</InputLabel>
+                <Select
+                  value={filterConfig.category}
+                  label="Category"
+                  onChange={(e) => setFilterConfig(prev => ({ ...prev, category: e.target.value }))}
+                  sx={{ minWidth: '140px' }}
+                >
+                  <MenuItem value="">All</MenuItem>
+                  {TRANSACTION_CATEGORIES.map(category => (
+                    <MenuItem key={category} value={category}>
+                      {category}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
               <Button
-                variant="contained"
-                startIcon={<AddIcon />}
-                onClick={() => setTransactionOpen(true)}
-                sx={{ whiteSpace: 'nowrap' }}
+           size="small"
+           variant={'contained'}
+                onClick={handleFilterReset}
               >
-                Add Transaction
+                Reset Filters
               </Button>
+            </Box>
+
+            {/* Sorting Headers */}
+            <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', mb: 1 }}>
+              <Typography variant="subtitle2">Sort By:</Typography>
+              {[
+                { key: 'date', label: 'Date' },
+                { key: 'amount', label: 'Amount' },
+                { key: 'description', label: 'Description' }
+              ].map(({ key, label }) => (
+                <Button
+                  key={key}
+                  size="small"
+                  variant={sortConfig.key === key ? 'contained' : 'outlined'}
+                  color={sortConfig.key === key ? 'primary' : 'secondary'}
+                  onClick={() => handleSort(key)}
+                  endIcon={
+                    sortConfig.key === key && (
+                      sortConfig.direction === 'asc' ? '▲' : '▼'
+                    )
+                  }
+                >
+                  {label}
+                </Button>
+              ))}
             </Box>
           </Paper>
         </Grid>
 
         {/* Transactions List */}
         <Grid item xs={12}>
-          {filteredTransactions.length === 0 ? (
+          {processTransactions().length === 0 ? (
             <Paper sx={{ p: 2, textAlign: 'center' }}>
               <Typography color="textSecondary">
                 {searchQuery ? 'No transactions found matching your search.' : 'No transactions for this month.'}
               </Typography>
             </Paper>
           ) : (
-            filteredTransactions.map((transaction) => (
+            processTransactions().map((transaction) => (
               <Paper
                 key={transaction._id}
                 sx={{
@@ -458,8 +557,8 @@ const Dashboard = () => {
                     size="small"
                     color="error"
                     onClick={() => handleDeleteClick(transaction)}
-                    sx={{ 
-                      '&:hover': { 
+                    sx={{
+                      '&:hover': {
                         backgroundColor: 'error.light',
                         color: 'error.contrastText'
                       }
@@ -509,9 +608,9 @@ const Dashboard = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
-          <Button 
-            onClick={handleDeleteConfirm} 
-            color="error" 
+          <Button
+            onClick={handleDeleteConfirm}
+            color="error"
             variant="contained"
           >
             Delete
