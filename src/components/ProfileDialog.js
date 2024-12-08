@@ -92,7 +92,6 @@ const ProfileDialog = ({ open, onClose }) => {
             );
 
             // Update both context and localStorage
-            const updatedUser = response.data.user;
             localStorage.setItem('user', JSON.stringify(response.data)); // Store full user object
             setUser(response.data); // Update context with full user object
             
