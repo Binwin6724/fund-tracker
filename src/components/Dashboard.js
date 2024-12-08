@@ -196,7 +196,7 @@ const Dashboard = () => {
     const headers = ['Date', 'Type', 'Category', 'Description', 'Amount'];
     const transactionsContent = [
       headers.join(','),
-      ...transactions.map(t => [
+      ...processTransactions().map(t => [
         new Date(t.date).toLocaleDateString('en-IN'),
         t.type,
         t.category,
@@ -213,8 +213,10 @@ const Dashboard = () => {
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
+    
     link.setAttribute('href', url);
-    link.setAttribute('download', `transactions_${new Date(2000, selectedMonth - 1).toLocaleString('default', { month: 'short' })}_${selectedYear}.csv`);
+    link.setAttribute('download', `fund_tracker_${selectedMonth}_${selectedYear}.csv`);
+    link.style.visibility = 'hidden';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -457,6 +459,14 @@ const Dashboard = () => {
                   startIcon={<AddIcon />}
                 >
                   Add Transaction
+                </Button>
+                <Button
+                  variant="outlined"
+                  startIcon={<FileDownloadIcon />}
+                  onClick={handleDownloadCSV}
+                  disabled={transactions.length === 0}
+                >
+                  Export CSV
                 </Button>
               </Box>
             </Box>
