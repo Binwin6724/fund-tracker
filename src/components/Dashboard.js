@@ -277,7 +277,10 @@ const Dashboard = () => {
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} style={{ display: 'flex', alignItems: 'center' }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" style={{ marginRight: '8px' }} className="bi bi-wallet2" viewBox="0 0 16 16">
+              <path d="M12.136.326A1.5 1.5 0 0 1 14 1.78V3h.5A1.5 1.5 0 0 1 16 4.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 13.5v-9a1.5 1.5 0 0 1 1.432-1.499zM5.562 3H13V1.78a.5.5 0 0 0-.621-.484zM1.5 4a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5z" />
+            </svg>
             Fund Tracker
           </Typography>
           <ThemeSwitch />
@@ -382,10 +385,19 @@ const Dashboard = () => {
         </Grid>
 
         {/* Controls */}
-        <Grid item xs={12}>
+        <Grid item xs={12} mb={2}>
           <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
-              <FormControl>
+            <Box sx={{
+              display: 'flex',
+              flexDirection: { xs: 'column', sm: 'row' },
+              gap: { xs: 1, sm: 2 },
+              alignItems: { xs: 'stretch', sm: 'center' },
+              flexWrap: 'wrap'
+            }}>
+              <FormControl sx={{
+                width: { xs: '100%', sm: 'auto' },
+                minWidth: { xs: '100%', sm: '140px' }
+              }}>
                 <InputLabel>Month</InputLabel>
                 <Select
                   value={selectedMonth}
@@ -400,7 +412,10 @@ const Dashboard = () => {
                   ))}
                 </Select>
               </FormControl>
-              <FormControl>
+              <FormControl sx={{
+                width: { xs: '100%', sm: 'auto' },
+                minWidth: { xs: '100%', sm: '140px' }
+              }}>
                 <InputLabel>Year</InputLabel>
                 <Select
                   value={selectedYear}
@@ -447,9 +462,18 @@ const Dashboard = () => {
             </Box>
 
             {/* Filter Headers */}
-            <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
-            <Typography variant="subtitle2">Filter By:</Typography>
-              <FormControl>
+            <Box sx={{
+              display: 'flex',
+              flexDirection: { xs: 'column', sm: 'row' },
+              gap: { xs: 1, sm: 2 },
+              alignItems: { xs: 'stretch', sm: 'center' },
+              flexWrap: 'wrap'
+            }}>
+              <Typography variant="subtitle2">Filter By:</Typography>
+              <FormControl sx={{
+                width: { xs: '100%', sm: 'auto' },
+                minWidth: { xs: '100%', sm: '140px' }
+              }}>
                 <InputLabel>Type</InputLabel>
                 <Select
                   value={filterConfig.type}
@@ -465,7 +489,10 @@ const Dashboard = () => {
                   ))}
                 </Select>
               </FormControl>
-              <FormControl>
+              <FormControl sx={{
+                width: { xs: '100%', sm: 'auto' },
+                minWidth: { xs: '100%', sm: '140px' }
+              }}>
                 <InputLabel>Category</InputLabel>
                 <Select
                   value={filterConfig.category}
@@ -482,8 +509,8 @@ const Dashboard = () => {
                 </Select>
               </FormControl>
               <Button
-           size="small"
-           variant={'contained'}
+                size="small"
+                variant={'contained'}
                 onClick={handleFilterReset}
               >
                 Reset Filters
@@ -516,6 +543,7 @@ const Dashboard = () => {
             </Box>
           </Paper>
         </Grid>
+
 
         {/* Transactions List */}
         <Grid item xs={12}>
