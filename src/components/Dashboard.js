@@ -235,15 +235,15 @@ const Dashboard = () => {
             sx={{ ml: 1 }}
           >
             <Avatar 
-              alt={user.name} 
-              src={getProfileImageUrl(user.profileImage)}
+              alt={user?.name || 'User'} 
+              src={getProfileImageUrl(user?.profileImage)}
               sx={{ 
                 bgcolor: theme.palette.primary.main,
                 width: 32,
                 height: 32
               }}
             >
-              {user.name.charAt(0)}
+              {user?.name ? user.name.charAt(0) : 'U'}
             </Avatar>
           </IconButton>
           <Menu

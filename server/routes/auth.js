@@ -150,6 +150,42 @@ router.put('/profile', auth, upload.single('profileImage'), async (req, res) => 
   }
 });
 
+// Update User Settings
+router.put('/settings', auth, async (req, res) => {
+  try {
+    const { settings } = req.body;
+    
+    // Find the user by ID from the authenticated request
+    const user = await User.findById(req.user.id);
+    
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Update user settings, preserving existing settings
+    user.settings = {
+      ...user.settings,
+      ...settings
+    };
+
+    await user.save();
+
+    // Return updated user object, excluding sensitive information
+    res.json({
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        profileImage: user.profileImage,
+        settings: user.settings
+      }
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+});
+
 // Get current user
 router.get('/me', auth, async (req, res) => {
   try {
