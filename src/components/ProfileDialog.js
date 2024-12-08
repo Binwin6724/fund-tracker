@@ -15,14 +15,16 @@ import {
 import { PhotoCamera } from '@mui/icons-material';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const getProfileImageUrl = (imagePath) => {
     if (!imagePath) return null;
-    return `http://localhost:5000${imagePath}`;
+    return `${process.env.REACT_APP_API_URL}${imagePath}`;
 };
 
 const ProfileDialog = ({ open, onClose }) => {
     const { user, setUser } = useAuth();
+    const navigate = useNavigate();
     const [name, setName] = useState(user?.name || '');
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
@@ -79,7 +81,7 @@ const ProfileDialog = ({ open, onClose }) => {
 
             const token = localStorage.getItem('token');
             const response = await axios.put(
-                'http://localhost:5000/api/auth/profile',
+                `${process.env.REACT_APP_API_URL}/api/auth/profile`,
                 formData,
                 {
                     headers: {
@@ -91,8 +93,8 @@ const ProfileDialog = ({ open, onClose }) => {
 
             // Update both context and localStorage
             const updatedUser = response.data.user;
-            localStorage.setItem('user', JSON.stringify(updatedUser));
-            setUser(updatedUser);
+            localStorage.setItem('user', JSON.stringify(response.data)); // Store full user object
+            setUser(response.data); // Update context with full user object
             
             setSuccess('Profile updated successfully');
             setCurrentPassword('');
@@ -106,7 +108,26 @@ const ProfileDialog = ({ open, onClose }) => {
                 onClose(); // Close the dialog after showing success
             }, 3000);
         } catch (error) {
-            setError(error.response?.data?.message || 'Failed to update profile');
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                if (error.response.data.message === 'Token is not valid') {
+                    // Handle token invalidation
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    setUser(null);
+                    navigate('/login');
+                } else {
+                    // Handle other error responses
+                    setError(JSON.stringify(error.response.data));
+                }
+            } else if (error.request) {
+                // The request was made but no response was received
+                setError('No response from server. Please check your connection.');
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                setError('An unexpected error occurred');
+            }
         } finally {
             setLoading(false);
         }

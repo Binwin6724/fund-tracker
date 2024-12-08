@@ -50,7 +50,7 @@ const SettingsDialog = ({ open, onClose }) => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.put(
-        'http://localhost:5000/api/auth/settings',
+        `${process.env.REACT_APP_API_URL}/api/auth/settings`,
         {
           settings: {
             language,

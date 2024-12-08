@@ -72,6 +72,12 @@ const Dashboard = () => {
       );
 
       if (!response.ok) {
+        const data = await response.json();
+        if (data.message === 'Token is not valid') {
+          logout();
+          navigate('/login');
+          return;
+        }
         throw new Error('Failed to fetch transactions');
       }
 
@@ -117,7 +123,7 @@ const Dashboard = () => {
 
   const getProfileImageUrl = (imagePath) => {
     if (!imagePath) return null;
-    return `http://localhost:5000${imagePath}`;
+    return `${process.env.REACT_APP_API_URL}${imagePath}`;
   };
 
   const handleDeleteClick = (transaction) => {
