@@ -35,12 +35,15 @@ function Login() {
       await login(email, password);
       navigate('/');
     } catch (error) {
+      console.error(error);
       if (error.message === 'Network Error') {
         setError('Unable to connect to server. Please check your connection or try again later.');
+      } else if (error.message === 'Invalid credentials') {
+        setError('Invalid email or password. Please try again.');
       } else if (!error.response) {
         setError('Server is not responding. Please try again later.');
       } else {
-        setError(error.response?.data?.message || 'Failed to login. Please check your credentials.');
+        setError('An unexpected error occurred. Please try again later.');
       }
     } finally {
       setLoading(false);
@@ -71,8 +74,8 @@ function Login() {
             Sign in to Fund Tracker
           </Typography>
           {error && (
-            <Alert 
-              severity="error" 
+            <Alert
+              severity="error"
               sx={{ mt: 2, width: '100%' }}
               onClose={() => setError('')}
             >
