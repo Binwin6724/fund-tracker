@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -16,13 +16,19 @@ import {
   MenuItem
 } from '@mui/material';
 import { useAuth } from '../context/AuthContext';
+import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 
 const LANGUAGES = [
   { code: 'en', name: 'English' },
-  { code: 'es', name: 'Spanish' },
-  { code: 'fr', name: 'French' },
-  { code: 'de', name: 'German' }
+  { code: 'hi', name: 'हिंदी' },
+  { code: 'ta', name: 'தமிழ்' },
+  { code: 'ml', name: 'മലയാളം' },
+  { code: 'te', name: 'తెలుగు' },
+  { code: 'kn', name: 'ಕನ್ನಡ' },
+  { code: 'es', name: 'Español' },
+  { code: 'fr', name: 'Français' },
+  { code: 'de', name: 'Deutsch' }
 ];
 
 const CURRENCIES = [
@@ -35,11 +41,22 @@ const CURRENCIES = [
 
 const SettingsDialog = ({ open, onClose }) => {
   const { user, setUser } = useAuth();
+  const { t, i18n } = useTranslation();
   const [language, setLanguage] = useState(user?.settings?.language || 'en');
   const [currency, setCurrency] = useState(user?.settings?.currency || 'USD');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+
+  // Update state when user settings change or dialog opens
+  useEffect(() => {
+    if (open && user?.settings) {
+      setLanguage(user.settings.language || 'en');
+      setCurrency(user.settings.currency || 'USD');
+      setError('');
+      setSuccess('');
+    }
+  }, [open, user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -50,7 +67,7 @@ const SettingsDialog = ({ open, onClose }) => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.put(
-        `${process.env.REACT_APP_API_URL}/api/auth/settings`,
+        `${process.env.REACT_APP_API_URL}/api/settings`,
         {
           settings: {
             language,
@@ -67,26 +84,41 @@ const SettingsDialog = ({ open, onClose }) => {
       const updatedUser = response.data.user;
       localStorage.setItem('user', JSON.stringify(updatedUser));
       setUser(updatedUser);
-      setSuccess('Settings updated successfully');
+      
+      // Change language immediately
+      await i18n.changeLanguage(language);
+      
+      setSuccess(t('settings.saveSuccess'));
 
       setTimeout(() => {
         onClose();
       }, 1500);
     } catch (error) {
-      setError(error.response?.data?.message || 'Failed to update settings');
+      console.error('Settings update error:', error);
+      setError(t('settings.saveError'));
     } finally {
       setLoading(false);
     }
   };
 
+  const handleClose = () => {
+    if (user?.settings) {
+      setLanguage(user.settings.language || 'en');
+      setCurrency(user.settings.currency || 'USD');
+    }
+    setError('');
+    setSuccess('');
+    onClose();
+  };
+
   return (
     <Dialog 
       open={open} 
-      onClose={onClose}
+      onClose={handleClose}
       maxWidth="sm"
       fullWidth
     >
-      <DialogTitle>Settings</DialogTitle>
+      <DialogTitle>{t('settings.title')}</DialogTitle>
       <form onSubmit={handleSubmit}>
         <DialogContent>
           {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
@@ -94,18 +126,16 @@ const SettingsDialog = ({ open, onClose }) => {
 
           <Box sx={{ mb: 3 }}>
             <Typography variant="h6" gutterBottom>
-              Language
+              {t('settings.language')}
             </Typography>
             <FormControl fullWidth>
-              <InputLabel>Language</InputLabel>
+              <InputLabel>{t('settings.language')}</InputLabel>
               <Select
-                name="language"
                 value={language}
-                label="Language"
                 onChange={(e) => setLanguage(e.target.value)}
-                disabled={loading}
+                label={t('settings.language')}
               >
-                {LANGUAGES.map(lang => (
+                {LANGUAGES.map((lang) => (
                   <MenuItem key={lang.code} value={lang.code}>
                     {lang.name}
                   </MenuItem>
@@ -116,63 +146,35 @@ const SettingsDialog = ({ open, onClose }) => {
 
           <Divider sx={{ my: 2 }} />
 
-          <Box sx={{ mt: 3 }}>
+          <Box sx={{ mb: 3 }}>
             <Typography variant="h6" gutterBottom>
-              Currency
+              {t('settings.currency')}
             </Typography>
             <FormControl fullWidth>
-              <InputLabel>Currency</InputLabel>
+              <InputLabel>{t('settings.currency')}</InputLabel>
               <Select
-                name="currency"
                 value={currency}
-                label="Currency"
                 onChange={(e) => setCurrency(e.target.value)}
-                disabled={loading}
+                label={t('settings.currency')}
               >
-                {CURRENCIES.map(currency => (
-                  <MenuItem key={currency.code} value={currency.code}>
-                    {currency.symbol} - {currency.name}
+                {CURRENCIES.map((curr) => (
+                  <MenuItem key={curr.code} value={curr.code}>
+                    {curr.symbol} - {curr.name}
                   </MenuItem>
                 ))}
               </Select>
             </FormControl>
           </Box>
         </DialogContent>
-        <DialogActions sx={{ px: 3, pb: 3 }}>
-          <Button
-            onClick={onClose}
-            variant="outlined"
-            sx={{
-              minWidth: '100px',
-              '&:hover': {
-                backgroundColor: 'rgba(33, 150, 243, 0.08)'
-              }
-            }}
-          >
-            Cancel
-          </Button>
-          <Button
-            type="submit"
-            variant="contained"
+
+        <DialogActions>
+          <Button onClick={handleClose}>{t('common.cancel')}</Button>
+          <Button 
+            type="submit" 
+            variant="contained" 
             disabled={loading}
-            sx={{
-              minWidth: '100px',
-              position: 'relative'
-            }}
           >
-            {loading ? (
-              <CircularProgress
-                size={24}
-                sx={{
-                  color: 'inherit',
-                  position: 'absolute',
-                  top: '50%',
-                  left: '50%',
-                  marginTop: '-12px',
-                  marginLeft: '-12px'
-                }}
-              />
-            ) : 'Save Changes'}
+            {loading ? <CircularProgress size={24} /> : t('common.save')}
           </Button>
         </DialogActions>
       </form>

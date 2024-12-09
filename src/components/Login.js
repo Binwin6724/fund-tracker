@@ -10,7 +10,8 @@ import {
   Alert,
   Paper,
   Grid,
-  CircularProgress
+  CircularProgress,
+  Link
 } from '@mui/material';
 
 function Login() {
@@ -113,32 +114,21 @@ function Login() {
               type="submit"
               fullWidth
               variant="contained"
+              sx={{ mt: 3, mb: 2 }}
               disabled={loading}
-              sx={{
-                mt: 3,
-                mb: 2,
-                height: '48px',
-                fontSize: '1rem'
-              }}
             >
-              {loading ? <CircularProgress size={24} color="inherit" /> : 'Sign In'}
+              {loading ? <CircularProgress size={24} /> : 'Sign In'}
             </Button>
-            <Grid container justifyContent="flex-end">
+            <Grid container>
+              <Grid item xs>
+                <Link component={RouterLink} to="/forgot-password" variant="body2">
+                  Forgot password?
+                </Link>
+              </Grid>
               <Grid item>
-                <Button
-                  component={RouterLink}
-                  to="/register"
-                  variant="text"
-                  sx={{
-                    textTransform: 'none',
-                    '&:hover': {
-                      backgroundColor: 'transparent',
-                      textDecoration: 'underline'
-                    }
-                  }}
-                >
-                  Don't have an account? Sign Up
-                </Button>
+                <Link component={RouterLink} to="/register" variant="body2">
+                  {"Don't have an account? Sign Up"}
+                </Link>
               </Grid>
             </Grid>
           </Box>

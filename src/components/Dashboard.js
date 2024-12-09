@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useTranslation } from 'react-i18next';
 import {
   AppBar,
   Box,
@@ -33,11 +34,13 @@ import ThemeSwitch from './ThemeSwitch';
 import ProfileDialog from './ProfileDialog';
 import SettingsDialog from './SettingsDialog';
 import TransactionDialog from './TransactionDialog';
+import LoadingSpinner from './LoadingSpinner';
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const theme = useMuiTheme();
+  const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = useState(null);
   const [profileOpen, setProfileOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -59,6 +62,30 @@ const Dashboard = () => {
     balance: 0,
     toRepay: 0
   });
+  const [isCheckingServer, setIsCheckingServer] = useState(true);
+
+  // Add server status check
+  useEffect(() => {
+    const checkServerStatus = async () => {
+      setIsCheckingServer(true);
+      try {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/healthcheck`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        if (!response.ok) {
+          throw new Error('Server is not responding');
+        }
+      } catch (error) {
+        console.error('Server connection error:', error);
+        navigate('/server-down');
+      } finally {
+        setIsCheckingServer(false);
+      }
+    };
+    checkServerStatus();
+  }, [navigate]);
 
   // Transaction type and category options
   const TRANSACTION_TYPES = ['income', 'expense'];
@@ -275,6 +302,10 @@ const Dashboard = () => {
     setSearchQuery('');
   };
 
+  if (isCheckingServer) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <AppBar position="static">
@@ -283,7 +314,7 @@ const Dashboard = () => {
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" style={{ marginRight: '8px' }} className="bi bi-wallet2" viewBox="0 0 16 16">
               <path d="M12.136.326A1.5 1.5 0 0 1 14 1.78V3h.5A1.5 1.5 0 0 1 16 4.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 13.5v-9a1.5 1.5 0 0 1 1.432-1.499zM5.562 3H13V1.78a.5.5 0 0 0-.621-.484zM1.5 4a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5z" />
             </svg>
-            Fund Tracker
+            {t('dashboard.title')}
           </Typography>
           <ThemeSwitch />
           <IconButton
@@ -322,10 +353,10 @@ const Dashboard = () => {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-            <MenuItem onClick={handleProfile}>Profile</MenuItem>
-            <MenuItem onClick={handleSettings}>Settings</MenuItem>
+            <MenuItem onClick={handleProfile}>{t('common.profile')}</MenuItem>
+            <MenuItem onClick={handleSettings}>{t('common.settings')}</MenuItem>
             <Divider />
-            <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            <MenuItem onClick={handleLogout}>{t('common.logout')}</MenuItem>
           </Menu>
         </Toolbar>
       </AppBar>
@@ -336,7 +367,7 @@ const Dashboard = () => {
             <Card>
               <CardContent>
                 <Typography color="textSecondary" gutterBottom>
-                  Total Income
+                  {t('dashboard.totalIncome')}
                 </Typography>
                 <Typography variant="h5" component="div" color="success.main">
                   ₹{totals.totalIncome.toFixed(2)}
@@ -348,7 +379,7 @@ const Dashboard = () => {
             <Card>
               <CardContent>
                 <Typography color="textSecondary" gutterBottom>
-                  Total Expenses
+                  {t('dashboard.totalExpenses')}
                 </Typography>
                 <Typography variant="h5" component="div" color="error.main">
                   ₹{totals.totalExpenses.toFixed(2)}
@@ -360,7 +391,7 @@ const Dashboard = () => {
             <Card>
               <CardContent>
                 <Typography color="textSecondary" gutterBottom>
-                  Balance
+                  {t('dashboard.balance')}
                 </Typography>
                 <Typography
                   variant="h5"
@@ -376,7 +407,7 @@ const Dashboard = () => {
             <Card sx={{ bgcolor: 'warning.light' }}>
               <CardContent>
                 <Typography color="textSecondary" gutterBottom style={{ fontWeight: 'bold' }}>
-                  Amount to Repay
+                  {t('transactions.toRepay')}
                 </Typography>
                 <Typography variant="h5" component="div" style={{ color: 'red' }}>
                   ₹{totals.toRepay.toFixed(2)}
@@ -400,10 +431,10 @@ const Dashboard = () => {
                 width: { xs: '100%', sm: 'auto' },
                 minWidth: { xs: '100%', sm: '140px' }
               }}>
-                <InputLabel>Month</InputLabel>
+                <InputLabel>{t('transactions.month')}</InputLabel>
                 <Select
                   value={selectedMonth}
-                  label="Month"
+                  label={t('transactions.month')}
                   onChange={(e) => setSelectedMonth(e.target.value)}
                   sx={{ minWidth: '160px' }}
                 >
@@ -418,10 +449,10 @@ const Dashboard = () => {
                 width: { xs: '100%', sm: 'auto' },
                 minWidth: { xs: '100%', sm: '140px' }
               }}>
-                <InputLabel>Year</InputLabel>
+                <InputLabel>{t('transactions.year')}</InputLabel>
                 <Select
                   value={selectedYear}
-                  label="Year"
+                  label={t('transactions.year')}
                   onChange={(e) => setSelectedYear(e.target.value)}
                   sx={{ minWidth: '160px' }}
                 >
@@ -437,7 +468,7 @@ const Dashboard = () => {
               </FormControl>
               <TextField
                 className="search-field"
-                placeholder="Search transactions..."
+                placeholder={t('common.search')}
                 variant="outlined"
                 fullWidth
                 value={searchQuery}
@@ -458,7 +489,7 @@ const Dashboard = () => {
                   onClick={() => setTransactionOpen(true)}
                   startIcon={<AddIcon />}
                 >
-                  Add Transaction
+                  {t('dashboard.addTransaction')}
                 </Button>
                 <Button
                   variant="outlined"
@@ -466,7 +497,7 @@ const Dashboard = () => {
                   onClick={handleDownloadCSV}
                   disabled={transactions.length === 0}
                 >
-                  Export CSV
+                  {t('common.download')}
                 </Button>
               </Box>
             </Box>
@@ -479,22 +510,22 @@ const Dashboard = () => {
               alignItems: { xs: 'stretch', sm: 'center' },
               flexWrap: 'wrap'
             }}>
-              <Typography variant="subtitle2">Filter By:</Typography>
+              <Typography variant="subtitle2">{t('transactions.filterBy')}</Typography>
               <FormControl sx={{
                 width: { xs: '100%', sm: 'auto' },
                 minWidth: { xs: '100%', sm: '140px' }
               }}>
-                <InputLabel>Type</InputLabel>
+                <InputLabel>{t('transactions.type')}</InputLabel>
                 <Select
                   value={filterConfig.type}
-                  label="Type"
+                  label={t('transactions.type')}
                   onChange={(e) => setFilterConfig(prev => ({ ...prev, type: e.target.value }))}
                   sx={{ minWidth: '140px' }}
                 >
-                  <MenuItem value="">All</MenuItem>
+                  <MenuItem value="">{t('common.all')}</MenuItem>
                   {TRANSACTION_TYPES.map(type => (
                     <MenuItem key={type} value={type}>
-                      {type.charAt(0).toUpperCase() + type.slice(1)}
+                      {t(`transactions.${type}`)}
                     </MenuItem>
                   ))}
                 </Select>
@@ -503,17 +534,17 @@ const Dashboard = () => {
                 width: { xs: '100%', sm: 'auto' },
                 minWidth: { xs: '100%', sm: '140px' }
               }}>
-                <InputLabel>Category</InputLabel>
+                <InputLabel>{t('transactions.category')}</InputLabel>
                 <Select
                   value={filterConfig.category}
-                  label="Category"
+                  label={t('transactions.category')}
                   onChange={(e) => setFilterConfig(prev => ({ ...prev, category: e.target.value }))}
                   sx={{ minWidth: '140px' }}
                 >
-                  <MenuItem value="">All</MenuItem>
+                  <MenuItem value="">{t('common.all')}</MenuItem>
                   {TRANSACTION_CATEGORIES.map(category => (
                     <MenuItem key={category} value={category}>
-                      {category}
+                      {t(`categories.${category.toLowerCase().replace(' ', '_')}`)}
                     </MenuItem>
                   ))}
                 </Select>
@@ -523,17 +554,18 @@ const Dashboard = () => {
                 variant={'contained'}
                 onClick={handleFilterReset}
               >
-                Reset Filters
+                {t('common.resetFilters')}
               </Button>
             </Box>
 
             {/* Sorting Headers */}
             <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', mb: 1 }}>
-              <Typography variant="subtitle2">Sort By:</Typography>
-              {[
-                { key: 'date', label: 'Date' },
-                { key: 'amount', label: 'Amount' },
-                { key: 'description', label: 'Description' }
+              <Typography variant="subtitle2">{t('transactions.sortBy')}</Typography>
+              {[/* eslint-disable indent */
+                { key: 'date', label: t('transactions.date') },
+                { key: 'amount', label: t('transactions.amount') },
+                { key: 'description', label: t('transactions.description') }
+              /* eslint-enable indent */
               ].map(({ key, label }) => (
                 <Button
                   key={key}
@@ -554,13 +586,12 @@ const Dashboard = () => {
           </Paper>
         </Grid>
 
-
         {/* Transactions List */}
         <Grid item xs={12}>
           {processTransactions().length === 0 ? (
             <Paper sx={{ p: 2, textAlign: 'center' }}>
               <Typography color="textSecondary">
-                {searchQuery ? 'No transactions found matching your search.' : 'No transactions for this month.'}
+                {searchQuery ? t('transactions.noResults') : t('transactions.noTransactions')}
               </Typography>
             </Paper>
           ) : (
@@ -630,28 +661,30 @@ const Dashboard = () => {
         open={deleteDialogOpen}
         onClose={() => setDeleteDialogOpen(false)}
       >
-        <DialogTitle>Delete Transaction</DialogTitle>
+        <DialogTitle>{t('transactions.deleteConfirmTitle')}</DialogTitle>
         <DialogContent>
           <Typography>
-            Are you sure you want to delete this transaction?
+            {t('transactions.deleteConfirmMessage')}
             {selectedTransaction && (
               <Box sx={{ mt: 2 }}>
-                <Typography><strong>Description:</strong> {selectedTransaction.description}</Typography>
-                <Typography><strong>Amount:</strong> ₹{selectedTransaction.amount.toFixed(2)}</Typography>
-                <Typography><strong>Category:</strong> {selectedTransaction.category}</Typography>
-                <Typography><strong>Date:</strong> {new Date(selectedTransaction.date).toLocaleDateString()}</Typography>
+                <Typography><strong>{t('transactions.description')}</strong> {selectedTransaction.description}</Typography>
+                <Typography><strong>{t('transactions.amount')}</strong> ₹{selectedTransaction.amount.toFixed(2)}</Typography>
+                <Typography><strong>{t('transactions.category')}</strong> {selectedTransaction.category}</Typography>
+                <Typography><strong>{t('transactions.date')}</strong> {new Date(selectedTransaction.date).toLocaleDateString()}</Typography>
               </Box>
             )}
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
+          <Button onClick={() => setDeleteDialogOpen(false)}>
+            {t('common.cancel')}
+          </Button>
           <Button
             onClick={handleDeleteConfirm}
             color="error"
             variant="contained"
           >
-            Delete
+            {t('common.delete')}
           </Button>
         </DialogActions>
       </Dialog>

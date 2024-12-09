@@ -1,0 +1,73 @@
+{
+  "common": {
+    "loading": "లోడ్ అవుతోంది...",
+    "error": "లోపం",
+    "success": "విజయం",
+    "save": "మార్పులను సేవ్ చేయి",
+    "cancel": "రద్దు చేయి",
+    "settings": "సెట్టింగ్‌లు",
+    "language": "భాష",
+    "currency": "కరెన్సీ",
+    "logout": "లాగ్ అవుట్",
+    "profile": "ప్రొఫైల్",
+    "search": "వెతుకు...",
+    "download": "డౌన్‌లోడ్",
+    "all": "అన్నీ",
+    "delete": "తొలగించు",
+    "resetFilters": "ఫిల్టర్లను రీసెట్ చేయి"
+  },
+  "dashboard": {
+    "title": "డాష్‌బోర్డ్",
+    "welcome": "తిరిగి స్వాగతం",
+    "totalBalance": "మొత్తం నిల్వ",
+    "totalIncome": "మొత్తం ఆదాయం",
+    "totalExpenses": "మొత్తం ఖర్చులు",
+    "balance": "నిల్వ",
+    "income": "ఆదాయం",
+    "expenses": "ఖర్చులు",
+    "recentTransactions": "ఇటీవలి లావాదేవీలు",
+    "viewAll": "అన్నీ చూడు",
+    "addTransaction": "లావాదేవీని జోడించు"
+  },
+  "transactions": {
+    "title": "లావాదేవీలు",
+    "filterBy": "ఫిల్టర్ చేయి",
+    "sortBy": "క్రమంలో పెట్టు",
+    "date": "తేదీ",
+    "description": "వివరణ",
+    "category": "వర్గం",
+    "amount": "మొత్తం",
+    "type": "రకం",
+    "income": "ఆదాయం",
+    "expense": "ఖర్చు",
+    "noTransactions": "లావాదేవీలు ఏవీ కనుగొనబడలేదు",
+    "month": "నెల",
+    "year": "సంవత్సరం",
+    "toRepay": "తిరిగి చెల్లించాల్సినవి",
+    "deleteConfirmTitle": "లావాదేవీని తొలగించు",
+    "deleteConfirmMessage": "మీరు ఖచ్చితంగా ఈ లావాదేవీని తొలగించాలనుకుంటున్నారా? ఈ చర్యను రద్దు చేయలేరు."
+  },
+  "categories": {
+    "salary": "జీతం",
+    "freelance": "ఫ్రీలాన్స్",
+    "investments": "పెట్టుబడులు",
+    "food": "ఆహారం",
+    "transportation": "రవాణా",
+    "utilities": "యుటిలిటీలు",
+    "rent": "అద్దె",
+    "entertainment": "వినోదం",
+    "shopping": "షాపింగ్",
+    "health": "ఆరోగ్యం",
+    "education": "విద్య",
+    "to_repay": "తిరిగి చెల్లించాల్సినవి"
+  },
+  "settings": {
+    "title": "సెట్టింగ్‌లు",
+    "language": "భాష",
+    "currency": "కరెన్సీ",
+    "theme": "థీమ్",
+    "notifications": "నోటిఫికేషన్లు",
+    "saveSuccess": "సెట్టింగ్‌లు విజయవంతంగా నవీకరించబడ్డాయి",
+    "saveError": "సెట్టింగ్‌లను నవీకరించడంలో లోపం"
+  }
+}

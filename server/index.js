@@ -28,10 +28,14 @@ mongoose.connect(process.env.MONGODB_URI)
 // Import routes
 const authRoutes = require('./routes/auth');
 const transactionRoutes = require('./routes/transactions');
+const systemRoutes = require('./routes/system');
+const settingsRoutes = require('./routes/settings');
 
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/transactions', transactionRoutes);
+app.use('/api/settings', settingsRoutes);
+app.use('/api', systemRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

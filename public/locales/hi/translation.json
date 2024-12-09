@@ -1,0 +1,73 @@
+{
+  "common": {
+    "loading": "लोड हो रहा है...",
+    "error": "त्रुटि",
+    "success": "सफल",
+    "save": "परिवर्तन सहेजें",
+    "cancel": "रद्द करें",
+    "settings": "सेटिंग्स",
+    "language": "भाषा",
+    "currency": "मुद्रा",
+    "logout": "लॉग आउट",
+    "profile": "प्रोफ़ाइल",
+    "search": "खोजें...",
+    "download": "डाउनलोड करें",
+    "all": "सभी",
+    "delete": "हटाएं",
+    "resetFilters": "फ़िल्टर रीसेट करें"
+  },
+  "dashboard": {
+    "title": "डैशबोर्ड",
+    "welcome": "वापसी पर स्वागत है",
+    "totalBalance": "कुल शेष राशि",
+    "totalIncome": "कुल आय",
+    "totalExpenses": "कुल खर्च",
+    "balance": "शेष राशि",
+    "income": "आय",
+    "expenses": "खर्च",
+    "recentTransactions": "हाल के लेन-देन",
+    "viewAll": "सभी देखें",
+    "addTransaction": "लेन-देन जोड़ें"
+  },
+  "transactions": {
+    "title": "लेन-देन",
+    "filterBy": "फ़िल्टर करें",
+    "sortBy": "क्रमबद्ध करें",
+    "date": "दिनांक",
+    "description": "विवरण",
+    "category": "श्रेणी",
+    "amount": "राशि",
+    "type": "प्रकार",
+    "income": "आय",
+    "expense": "खर्च",
+    "noTransactions": "कोई लेन-देन नहीं मिला",
+    "month": "महीना",
+    "year": "वर्ष",
+    "toRepay": "चुकाने के लिए",
+    "deleteConfirmTitle": "लेन-देन हटाएं",
+    "deleteConfirmMessage": "क्या आप वाकई इस लेन-देन को हटाना चाहते हैं? यह क्रिया वापस नहीं ली जा सकती।"
+  },
+  "categories": {
+    "salary": "वेतन",
+    "freelance": "फ्रीलांस",
+    "investments": "निवेश",
+    "food": "भोजन",
+    "transportation": "परिवहन",
+    "utilities": "उपयोगिताएं",
+    "rent": "किराया",
+    "entertainment": "मनोरंजन",
+    "shopping": "खरीदारी",
+    "health": "स्वास्थ्य",
+    "education": "शिक्षा",
+    "to_repay": "चुकाने के लिए"
+  },
+  "settings": {
+    "title": "सेटिंग्स",
+    "language": "भाषा",
+    "currency": "मुद्रा",
+    "theme": "थीम",
+    "notifications": "सूचनाएं",
+    "saveSuccess": "सेटिंग्स सफलतापूर्वक अपडेट की गईं",
+    "saveError": "सेटिंग्स अपडेट करने में त्रुटि"
+  }
+}

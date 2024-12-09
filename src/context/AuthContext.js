@@ -1,10 +1,18 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import i18n from '../i18n';
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+
+    // Apply user settings (language, etc.)
+    const applyUserSettings = (userData) => {
+        if (userData?.settings?.language) {
+            i18n.changeLanguage(userData.settings.language);
+        }
+    };
 
     useEffect(() => {
         const initAuth = () => {
@@ -14,6 +22,7 @@ export const AuthProvider = ({ children }) => {
                 try {
                     const parsedUser = JSON.parse(userData);
                     setUser(parsedUser);
+                    applyUserSettings(parsedUser);
                 } catch (error) {
                     console.error('Error parsing user data:', error);
                     localStorage.removeItem('token');
@@ -42,6 +51,7 @@ export const AuthProvider = ({ children }) => {
             localStorage.setItem('token', data.token);
             localStorage.setItem('user', JSON.stringify(data.user));
             setUser(data.user);
+            applyUserSettings(data.user);
             return data;
         } catch (error) {
             throw error;
@@ -61,6 +71,7 @@ export const AuthProvider = ({ children }) => {
             localStorage.setItem('token', data.token);
             localStorage.setItem('user', JSON.stringify(data.user));
             setUser(data.user);
+            applyUserSettings(data.user);
             return data;
         } catch (error) {
             throw error;
@@ -70,12 +81,15 @@ export const AuthProvider = ({ children }) => {
     const updateUser = (userData) => {
         localStorage.setItem('user', JSON.stringify(userData));
         setUser(userData);
+        applyUserSettings(userData);
     };
 
     const logout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         setUser(null);
+        // Reset to default language on logout
+        i18n.changeLanguage('en');
     };
 
     return (

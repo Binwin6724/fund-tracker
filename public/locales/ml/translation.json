@@ -1,0 +1,73 @@
+{
+  "common": {
+    "loading": "ലോഡ് ചെയ്യുന്നു...",
+    "error": "പിശക്",
+    "success": "വിജയം",
+    "save": "മാറ്റങ്ങൾ സേവ് ചെയ്യുക",
+    "cancel": "റദ്ദാക്കുക",
+    "settings": "ക്രമീകരണങ്ങൾ",
+    "language": "ഭാഷ",
+    "currency": "കറൻസി",
+    "logout": "ലോഗ്ഔട്ട്",
+    "profile": "പ്രൊഫൈൽ",
+    "search": "തിരയുക...",
+    "download": "ഡൗൺലോഡ്",
+    "all": "എല്ലാം",
+    "delete": "ഇല്ലാതാക്കുക",
+    "resetFilters": "ഫിൽട്ടറുകൾ പുനഃക്രമീകരിക്കുക"
+  },
+  "dashboard": {
+    "title": "ഡാഷ്ബോർഡ്",
+    "welcome": "തിരികെ സ്വാഗതം",
+    "totalBalance": "ആകെ ബാലൻസ്",
+    "totalIncome": "ആകെ വരുമാനം",
+    "totalExpenses": "ആകെ ചെലവുകൾ",
+    "balance": "ബാലൻസ്",
+    "income": "വരുമാനം",
+    "expenses": "ചെലവുകൾ",
+    "recentTransactions": "സമീപകാല ഇടപാടുകൾ",
+    "viewAll": "എല്ലാം കാണുക",
+    "addTransaction": "ഇടപാട് ചേർക്കുക"
+  },
+  "transactions": {
+    "title": "ഇടപാടുകൾ",
+    "filterBy": "ഫിൽട്ടർ ചെയ്യുക",
+    "sortBy": "ക്രമീകരിക്കുക",
+    "date": "തീയതി",
+    "description": "വിവരണം",
+    "category": "വിഭാഗം",
+    "amount": "തുക",
+    "type": "തരം",
+    "income": "വരുമാനം",
+    "expense": "ചെലവ്",
+    "noTransactions": "ഇടപാടുകളൊന്നും കണ്ടെത്തിയില്ല",
+    "month": "മാസം",
+    "year": "വർഷം",
+    "toRepay": "തിരിച്ചടയ്ക്കാൻ",
+    "deleteConfirmTitle": "ഇടപാട് ഇല്ലാതാക്കുക",
+    "deleteConfirmMessage": "ഈ ഇടപാട് ഇല്ലാതാക്കണമെന്ന് തീർച്ചയാണോ? ഈ പ്രവർത്തി പിന്നീട് പഴയപടിയാക്കാൻ കഴിയില്ല."
+  },
+  "categories": {
+    "salary": "ശമ്പളം",
+    "freelance": "ഫ്രീലാൻസ്",
+    "investments": "നിക്ഷേപങ്ങൾ",
+    "food": "ഭക്ഷണം",
+    "transportation": "യാത്ര",
+    "utilities": "ഉപയോഗങ്ങൾ",
+    "rent": "വാടക",
+    "entertainment": "വിനോദം",
+    "shopping": "ഷോപ്പിംഗ്",
+    "health": "ആരോഗ്യം",
+    "education": "വിദ്യാഭ്യാസം",
+    "to_repay": "തിരിച്ചടയ്ക്കാൻ"
+  },
+  "settings": {
+    "title": "ക്രമീകരണങ്ങൾ",
+    "language": "ഭാഷ",
+    "currency": "കറൻസി",
+    "theme": "തീം",
+    "notifications": "അറിയിപ്പുകൾ",
+    "saveSuccess": "ക്രമീകരണങ്ങൾ വിജയകരമായി പുതുക്കി",
+    "saveError": "ക്രമീകരണങ്ങൾ പുതുക്കുന്നതിൽ പിശക്"
+  }
+}

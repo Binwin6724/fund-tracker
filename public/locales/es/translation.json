@@ -1,0 +1,62 @@
+{
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "save": "Guardar Cambios",
+    "cancel": "Cancelar",
+    "settings": "Configuración",
+    "language": "Idioma",
+    "currency": "Moneda",
+    "logout": "Cerrar Sesión",
+    "profile": "Perfil",
+    "resetFilters": "Restablecer filtros"
+  },
+  "auth": {
+    "login": "Iniciar Sesión",
+    "register": "Registrarse",
+    "email": "Correo Electrónico",
+    "password": "Contraseña",
+    "confirmPassword": "Confirmar Contraseña",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "noAccount": "¿No tienes una cuenta? Regístrate",
+    "hasAccount": "¿Ya tienes una cuenta? Inicia Sesión",
+    "resetPassword": "Restablecer Contraseña",
+    "resetPasswordInstructions": "Ingresa tu correo electrónico y te enviaremos instrucciones para restablecer tu contraseña."
+  },
+  "dashboard": {
+    "title": "Panel de Control",
+    "welcome": "Bienvenido de nuevo",
+    "totalBalance": "Balance Total",
+    "totalIncome": "Ingresos Totales",
+    "totalExpenses": "Gastos Totales",
+    "balance": "Balance",
+    "income": "Ingresos",
+    "expenses": "Gastos",
+    "recentTransactions": "Transacciones Recientes",
+    "viewAll": "Ver Todo",
+    "addTransaction": "Añadir Transacción"
+  },
+  "transactions": {
+    "title": "Transacciones",
+    "filterBy": "Filtrar por",
+    "sortBy": "Ordenar por",
+    "date": "Fecha",
+    "description": "Descripción",
+    "category": "Categoría",
+    "amount": "Monto",
+    "type": "Tipo",
+    "income": "Ingreso",
+    "expense": "Gasto",
+    "noTransactions": "No se encontraron transacciones"
+  },
+  "settings": {
+    "title": "Configuración",
+    "language": "Idioma",
+    "currency": "Moneda",
+    "theme": "Tema",
+    "notifications": "Notificaciones",
+    "saveSuccess": "Configuración actualizada exitosamente",
+    "saveError": "Error al actualizar la configuración"
+  }
+}

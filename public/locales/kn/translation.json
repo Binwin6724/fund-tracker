@@ -1,0 +1,73 @@
+{
+  "common": {
+    "loading": "ಲೋಡ್ ಆಗುತ್ತಿದೆ...",
+    "error": "ದೋಷ",
+    "success": "ಯಶಸ್ಸು",
+    "save": "ಬದಲಾವಣೆಗಳನ್ನು ಉಳಿಸಿ",
+    "cancel": "ರದ್ದುಮಾಡಿ",
+    "settings": "ಸೆಟ್ಟಿಂಗ್‌ಗಳು",
+    "language": "ಭಾಷೆ",
+    "currency": "ಕರೆನ್ಸಿ",
+    "logout": "ಲಾಗ್ ಔಟ್",
+    "profile": "ಪ್ರೊಫೈಲ್",
+    "search": "ಹುಡುಕಿ...",
+    "download": "ಡೌನ್‌ಲೋಡ್",
+    "all": "ಎಲ್ಲಾ",
+    "delete": "ಅಳಿಸಿ",
+    "resetFilters": "ಫಿಲ್ಟರ್‌ಗಳನ್ನು ಮರುಹೊಂದಿಸಿ"
+  },
+  "dashboard": {
+    "title": "ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
+    "welcome": "ಮರಳಿ ಸ್ವಾಗತ",
+    "totalBalance": "ಒಟ್ಟು ಬ್ಯಾಲೆನ್ಸ್",
+    "totalIncome": "ಒಟ್ಟು ಆದಾಯ",
+    "totalExpenses": "ಒಟ್ಟು ವೆಚ್ಚಗಳು",
+    "balance": "ಬ್ಯಾಲೆನ್ಸ್",
+    "income": "ಆದಾಯ",
+    "expenses": "ವೆಚ್ಚಗಳು",
+    "recentTransactions": "ಇತ್ತೀಚಿನ ವಹಿವಾಟುಗಳು",
+    "viewAll": "ಎಲ್ಲವನ್ನೂ ನೋಡಿ",
+    "addTransaction": "ವಹಿವಾಟು ಸೇರಿಸಿ"
+  },
+  "transactions": {
+    "title": "ವಹಿವಾಟುಗಳು",
+    "filterBy": "ಫಿಲ್ಟರ್ ಮಾಡಿ",
+    "sortBy": "ವಿಂಗಡಿಸಿ",
+    "date": "ದಿನಾಂಕ",
+    "description": "ವಿವರಣೆ",
+    "category": "ವರ್ಗ",
+    "amount": "ಮೊತ್ತ",
+    "type": "ಪ್ರಕಾರ",
+    "income": "ಆದಾಯ",
+    "expense": "ವೆಚ್ಚ",
+    "noTransactions": "ಯಾವುದೇ ವಹಿವಾಟುಗಳು ಕಂಡುಬಂದಿಲ್ಲ",
+    "month": "ತಿಂಗಳು",
+    "year": "ವರ್ಷ",
+    "toRepay": "ಮರುಪಾವತಿಸಲು",
+    "deleteConfirmTitle": "ವಹಿವಾಟನ್ನು ಅಳಿಸಿ",
+    "deleteConfirmMessage": "ನೀವು ಖಚಿತವಾಗಿ ಈ ವಹಿವಾಟನ್ನು ಅಳಿಸಲು ಬಯಸುವಿರಾ? ಈ ಕ್ರಿಯೆಯನ್ನು ರದ್ದುಗೊಳಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ."
+  },
+  "categories": {
+    "salary": "ಸಂಬಳ",
+    "freelance": "ಫ್ರೀಲಾನ್ಸ್",
+    "investments": "ಹೂಡಿಕೆಗಳು",
+    "food": "ಆಹಾರ",
+    "transportation": "ಸಾರಿಗೆ",
+    "utilities": "ಉಪಯುಕ್ತತೆಗಳು",
+    "rent": "ಬಾಡಿಗೆ",
+    "entertainment": "ಮನರಂಜನೆ",
+    "shopping": "ಶಾಪಿಂಗ್",
+    "health": "ಆರೋಗ್ಯ",
+    "education": "ಶಿಕ್ಷಣ",
+    "to_repay": "ಮರುಪಾವತಿಸಲು"
+  },
+  "settings": {
+    "title": "ಸೆಟ್ಟಿಂಗ್‌ಗಳು",
+    "language": "ಭಾಷೆ",
+    "currency": "ಕರೆನ್ಸಿ",
+    "theme": "ಥೀಮ್",
+    "notifications": "ಅಧಿಸೂಚನೆಗಳು",
+    "saveSuccess": "ಸೆಟ್ಟಿಂಗ್‌ಗಳು ಯಶಸ್ವಿಯಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ",
+    "saveError": "ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ನವೀಕರಿಸುವಲ್ಲಿ ದೋಷ"
+  }
+}

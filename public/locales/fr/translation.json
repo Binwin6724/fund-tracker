@@ -1,0 +1,60 @@
+{
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "save": "Enregistrer les Modifications",
+    "cancel": "Annuler",
+    "settings": "Paramètres",
+    "language": "Langue",
+    "currency": "Devise",
+    "logout": "Déconnexion",
+    "profile": "Profil",
+    "resetFilters": "Réinitialiser les filtres"
+  },
+  "auth": {
+    "login": "Connexion",
+    "register": "S'inscrire",
+    "email": "Adresse Email",
+    "password": "Mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "forgotPassword": "Mot de passe oublié?",
+    "noAccount": "Pas de compte? Inscrivez-vous",
+    "hasAccount": "Déjà un compte? Connectez-vous",
+    "resetPassword": "Réinitialiser le mot de passe",
+    "resetPasswordInstructions": "Entrez votre adresse email et nous vous enverrons les instructions pour réinitialiser votre mot de passe."
+  },
+  "dashboard": {
+    "title": "Tableau de Bord",
+    "welcome": "Bienvenue",
+    "totalBalance": "Solde Total",
+    "totalIncome": "Revenus Totaux",
+    "totalExpenses": "Dépenses Totales",
+    "balance": "Solde",
+    "recentTransactions": "Transactions Récentes",
+    "viewAll": "Voir Tout",
+    "addTransaction": "Ajouter une Transaction"
+  },
+  "transactions": {
+    "title": "Transactions",
+    "date": "Date",
+    "description": "Description",
+    "category": "Catégorie",
+    "amount": "Montant",
+    "type": "Type",
+    "income": "Revenu",
+    "expense": "Dépense",
+    "noTransactions": "Aucune transaction trouvée",
+    "filterBy": "Filtrer par",
+    "sortBy": "Trier par"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "language": "Langue",
+    "currency": "Devise",
+    "theme": "Thème",
+    "notifications": "Notifications",
+    "saveSuccess": "Paramètres mis à jour avec succès",
+    "saveError": "Échec de la mise à jour des paramètres"
+  }
+}
