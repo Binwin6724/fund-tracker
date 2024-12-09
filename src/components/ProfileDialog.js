@@ -72,6 +72,11 @@ const ProfileDialog = ({ open, onClose }) => {
                     setLoading(false);
                     return;
                 }
+                if (newPassword.length < 6) {
+                    setError('New password must be at least 6 characters long.');
+                    setLoading(false);
+                    return;
+                }
                 formData.append('currentPassword', currentPassword);
                 formData.append('newPassword', newPassword);
             }
@@ -116,6 +121,8 @@ const ProfileDialog = ({ open, onClose }) => {
                     localStorage.removeItem('user');
                     setUser(null);
                     navigate('/login');
+                } else if (error.response.data.message === 'Invalid current password') {
+                    setError('The current password you entered is incorrect.');
                 } else {
                     // Handle other error responses
                     setError(JSON.stringify(error.response.data));

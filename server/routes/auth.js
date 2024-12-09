@@ -129,6 +129,8 @@ router.put('/profile', auth, upload.single('profileImage'), async (req, res) => 
       return res.status(404).json({ message: 'User not found' });
     }
 
+    console.log('Updating profile for user:', user.id);
+    console.log('Request body:', req.body);
     // Update user data
     if (req.body.name) {
       user.name = req.body.name;
@@ -136,6 +138,19 @@ router.put('/profile', auth, upload.single('profileImage'), async (req, res) => 
 
     if (req.file) {
       user.profileImage = '/uploads/' + req.file.filename;
+    }
+
+    if (req.body.currentPassword && req.body.newPassword) {
+      // Validate current password
+      const isMatch = await bcrypt.compare(req.body.currentPassword, user.password);
+      if (!isMatch) {
+        return res.status(400).json({ message: 'Invalid current password' });
+      }
+      console.log('Current password validated.');
+      // Validate and hash new password
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(req.body.newPassword, salt);
+      console.log('New password hashed and saved.');
     }
 
     await user.save();
